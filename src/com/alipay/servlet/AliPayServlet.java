@@ -61,7 +61,10 @@ public class AliPayServlet extends HttpServlet {
 		//请求
 		AlipayTradePagePayResponse payResp = null;
 		try {
-			payResp = alipayClient.pageExecute(alipayRequest);
+			//网页版调用
+			//payResp = alipayClient.pageExecute(alipayRequest);
+			//app版调用
+			payResp = alipayClient.sdkExecute(alipayRequest);
 		} catch (AlipayApiException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +72,8 @@ public class AliPayServlet extends HttpServlet {
 		//需要进行转码，编码格式不对会导致验签失败
 		//tomcat的默认编码为ISO-8859-1，所以猜测阿里的沙箱环境用的tomcat
 		//而我这里用的是utf-8，所以需要将utf-8转码为ISO-8859-1
-		out.append(new String(payResp.getBody().getBytes("UTF-8"),"ISO-8859-1"));
+		//out.append(new String(payResp.getBody().getBytes("UTF-8"),"ISO-8859-1"));
+		out.append(payResp.getBody());
 		//request.getRequestDispatcher("alipay_pay.jsp").forward(request, response);
 	}
 
